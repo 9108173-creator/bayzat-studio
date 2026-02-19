@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approval Flows - UAT Testing Guide</title>
+    <style>
+        /* Bayzat Brand CSS Variables */
+        :root {
+            --bayzat-purple: #9647FF;
+            --bayzat-dark-purple: #4A378B;
+            --bayzat-charcoal: #242424;
+            --bayzat-black: #000000;
+            --bayzat-white: #FFFFFF;
+            --bayzat-stone: #E8E8E8;
+            --bayzat-gray-1: #C8C8C8;
+            --font-headline: Arial, Helvetica, sans-serif;
+            --font-body: Arial, Helvetica, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-body);
+            font-size: 13px;
+            line-height: 1.3;
+            color: var(--bayzat-black);
+            background: var(--bayzat-stone);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bayzat-white);
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: var(--bayzat-purple);
+            color: var(--bayzat-white);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-family: var(--font-headline);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 28px;
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+        
+        .header p {
+            font-size: 12px;
+            opacity: 0.95;
+            line-height: 1.3;
+        }
+        
+        .doc-meta {
+            background: var(--bayzat-stone);
+            border-left: 4px solid var(--bayzat-purple);
+            padding: 12px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--bayzat-black);
+        }
+        
+        h2 {
+            color: var(--bayzat-white);
+            background: var(--bayzat-purple);
+            padding: 10px 15px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            border-left: 4px solid var(--bayzat-dark-purple);
+            font-family: var(--font-headline);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        
+        h3 {
+            color: var(--bayzat-purple);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: var(--font-headline);
+        }
+        
+        p {
+            margin-bottom: 12px;
+            line-height: 1.3;
+            color: var(--bayzat-black);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            border: 1px solid var(--bayzat-gray-1);
+        }
+        
+        th {
+            background: var(--bayzat-purple);
+            color: var(--bayzat-white);
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--bayzat-gray-1);
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .scope-table th {
+            background: var(--bayzat-purple);
+        }
+        
+        .sign-off-table {
+            margin-top: 20px;
+        }
+        
+        .sign-off-table th {
+            background: var(--bayzat-purple);
+            color: white;
+        }
+        
+        .sign-off-table td {
+            border: 1px solid var(--bayzat-gray-1);
+            height: 50px;
+        }
+        
+        .summary-box {
+            background: var(--bayzat-stone);
+            border-left: 4px solid var(--bayzat-purple);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        
+        .summary-box h3 {
+            margin-top: 0;
+            color: var(--bayzat-charcoal);
+        }
+        
+        .section-break {
+            height: 2px;
+            background: linear-gradient(to right, var(--bayzat-purple), transparent);
+            margin: 40px 0;
+        }
+        
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .screenshot-item {
+            border: 1px solid var(--bayzat-gray-1);
+            border-radius: 4px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #f5f5f5;
+        }
+        
+        .screenshot-label {
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--bayzat-purple);
+            background: var(--bayzat-stone);
+            border-top: 1px solid var(--bayzat-gray-1);
+        }
+        
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--bayzat-gray-1);
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+        
+        a {
+            color: var(--bayzat-purple);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="display:inline-block;margin-right:10px;">
+                <circle cx="20" cy="20" r="18" stroke="white" stroke-width="2"/>
+                <text x="20" y="25" font-size="20" font-weight="bold" fill="white" text-anchor="middle">B</text>
+            </svg>
+            <h1>Approval Flows UAT</h1>
+            <p>Testing Guide</p>
+        </div>
+        
+        <!-- INTRODUCTION -->
+        <h2>Introduction</h2>
+        <p>This document provides step-by-step testing scenarios for the Approval Flows module in Bayzat. Approval Flows is a routing configuration system that automatically directs employee requests to the appropriate approvers based on defined criteria. Instead of manually assigning approvers, you configure intelligent approval paths that automatically route requests based on employee attributes, request amounts, departments, or custom conditions. Tests should be executed in your designated environment (staging or production as applicable).</p>
+        <p>The system supports 40+ request types with dedicated configuration tabs for Leave, Expenses, Loans, Air Tickets, Attendance Regularization, and more. Administrators configure advanced (conditional) flows for exception-based routing and default flows for standard cases. Approval flows support multi-step hierarchies, parallel approvers, and role-based routing. This guide focuses on core workflows: accessing approval flows, creating and editing advanced flows, configuring default flows, and testing automatic request routing.</p>
+        
+        <!-- SCOPE -->
+        <h2>Scope</h2>
+        <h3>What We're Testing</h3>
+        <table class="scope-table">
+            <tr>
+                <th style="background: #2D8659;">IN-SCOPE</th>
+                <th style="background: #C93137;">OUT-OF-SCOPE</th>
+            </tr>
+            <tr>
+                <td>Super Admin access and permissions for approval flows</td>
+                <td>User permission levels below Super Admin</td>
+            </tr>
+            <tr>
+                <td>Creating advanced approval flows with conditional criteria</td>
+                <td>API-based approval flow configuration</td>
+            </tr>
+            <tr>
+                <td>Configuring default approval flows as fallback</td>
+                <td>Copying/exporting flows between systems</td>
+            </tr>
+            <tr>
+                <td>Editing, deleting, and managing flow priority</td>
+                <td>Cross-organizational approval flows</td>
+            </tr>
+            <tr>
+                <td>Using approval flows across 40+ request types (Leave, Expense, Loan, etc.)</td>
+                <td>Custom request type creation</td>
+            </tr>
+            <tr>
+                <td>Testing automatic request routing based on configured flows</td>
+                <td>Approval flow integration with Bayzat Workflows</td>
+            </tr>
+        </table>
+        
+        <!-- SECTION 1: ACCESS & NAVIGATION -->
+        <div class="section-break"></div>
+        <h2>SCENARIO 1: Access & Configure Approval Flows</h2>
+        <h3>Test Cases</h3>
+        <table>
+            <tr>
+                <th>Scenario</th>
+                <th>Steps</th>
+                <th>Expected Result</th>
+                <th style="width: 60px;">✓</th>
+                <th>Help Article</th>
+            </tr>
+            <tr>
+                <td><strong>Access Approval Flows Module</strong></td>
+                <td>1. Log in as Super Admin<br>2. Click "Automations" in left sidebar<br>3. Click "Approval flows" submenu<br>4. Main approval flows page loads<br>5. View request type tabs</td>
+                <td>Approval Flows page loads successfully. Shows multiple tabs (Leave, Expense, Loan, Air Ticket, Attendance, etc.). Each tab displays configuration for that request type. "Advanced approval flow" and "Default approval flow" sections visible.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-access">Access flows</a></td>
+            </tr>
+            <tr>
+                <td><strong>Non-Super Admin Cannot Access</strong></td>
+                <td>1. Log in as regular HR Admin<br>2. Click "Automations" in sidebar<br>3. Try to click "Approval flows"<br>4. Access denied or option unavailable<br>5. Verify permission restriction</td>
+                <td>Non-Super Admin users cannot access Approval Flows. Option may be grayed out, hidden, or shows permission denied message. Super Admin access is required. System enforces permission restriction correctly.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-perms">Permissions</a></td>
+            </tr>
+            <tr>
+                <td><strong>View Request Type Tabs</strong></td>
+                <td>1. In Approval Flows page<br>2. Look for request type tabs<br>3. Click "Leave" tab<br>4. Shows Leave approval configuration<br>5. Click "Expense" tab<br>6. Shows Expense configuration</td>
+                <td>Each tab displays configuration specific to that request type. Leave tab shows leave-specific data points (Number of Days, Leave Type). Expense tab shows expense-specific (Amount, Currency, Policy). Can switch between tabs without losing data.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-tabs">View tabs</a></td>
+            </tr>
+            <tr>
+                <td><strong>Understand Advanced vs Default Flows</strong></td>
+                <td>1. On any request type tab<br>2. Identify "Advanced approval flow" section<br>3. Look for "If conditions" badge<br>4. Identify "Default approval flow" section<br>5. Look for "Else" badge</td>
+                <td>Advanced flows clearly labeled with "If conditions" badge. Support conditional routing. Default flows labeled with "Else" badge. Act as fallback when no advanced flow matches. Visual distinction clear between flow types.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-flow-types">Flow types</a></td>
+            </tr>
+            <tr>
+                <td><strong>Verify Update Button Present</strong></td>
+                <td>1. On approval flows page<br>2. Look at bottom of page<br>3. Find "Update Approval Flows" button<br>4. Button is active (not grayed out)<br>5. Can be clicked</td>
+                <td>"Update Approval Flows" button visible at bottom of page. Activates all unsaved changes. Button enabled and clickable. Clicking activates all flow changes at once (atomic update).</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-update">Update button</a></td>
+            </tr>
+        </table>
+        
+        <h3>Screenshots</h3>
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/03-approval-flows-page.png" alt="Main Page" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Approval Flows Main Page</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/04-advanced-flow-builder.png" alt="Flow Builder" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Advanced Flow Builder Interface</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/05-criteria-data-points.png" alt="Data Points" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Criteria Data Points Available</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/06-approver-roles.png" alt="Approver Roles" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Available Approver Roles</div>
+            </div>
+        </div>
+        
+        <!-- SECTION 2: CREATE & CONFIGURE FLOWS -->
+        <div class="section-break"></div>
+        <h2>SCENARIO 2: Create Advanced Approval Flows with Criteria</h2>
+        <h3>Test Cases</h3>
+        <table>
+            <tr>
+                <th>Scenario</th>
+                <th>Steps</th>
+                <th>Expected Result</th>
+                <th style="width: 60px;">✓</th>
+                <th>Help Article</th>
+            </tr>
+            <tr>
+                <td><strong>Add Advanced Flow Dialog</strong></td>
+                <td>1. On Expense tab<br>2. In "Advanced approval flow" section<br>3. Click "+ Add advance flow" button<br>4. Configuration dialog opens<br>5. Shows Flow name and Description fields</td>
+                <td>Dialog opens with empty form. Flow name field available (required). Description field available (optional). Criteria section below. Approval Steps section below criteria. "Done" button to save flow.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-add-flow">Add flow</a></td>
+            </tr>
+            <tr>
+                <td><strong>Configure Single Criterion</strong></td>
+                <td>1. In flow dialog<br>2. Click "Add criteria" button<br>3. Data point dropdown shows<br>4. Select: "Amount"<br>5. Choose operation: "is greater than"<br>6. Enter value: "5000"</td>
+                <td>Data point dropdown shows 50+ available fields (Amount, Department, Employee Grade, Policy, etc.). Operation dropdown shows operators (is greater than, is less than, is between, is equal to). Value field accepts numeric input. Criteria displays as readable rule.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-criteria">Add criteria</a></td>
+            </tr>
+            <tr>
+                <td><strong>Add Multiple Criteria (AND Logic)</strong></td>
+                <td>1. First criteria: Amount > 5000<br>2. Click "Add criteria" again<br>3. Second criteria: Department = "Finance"<br>4. Both criteria show in flow<br>5. AND logic implied</td>
+                <td>Multiple criteria added successfully. Both display in flow configuration. AND logic applies by default (request must match ALL criteria to trigger this flow). Can add additional criteria. Each criterion removable individually.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-multi-criteria">Multiple criteria</a></td>
+            </tr>
+            <tr>
+                <td><strong>Configure Approval Steps</strong></td>
+                <td>1. In flow dialog<br>2. Under "Approval flow" section<br>3. Click "Add step" button<br>4. Step 1 appears<br>5. Click "Add approver" in step<br>6. Select role: "Finance Manager"</td>
+                <td>Approval Steps section appears. "Add step" creates new sequential step. Within each step, "Add approver" allows role selection. Approver dropdown shows available roles (Line Manager, People Manager, Finance Manager, Super Admin, custom roles). Multiple approvers can be added within one step (OR logic).</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-steps">Configure steps</a></td>
+            </tr>
+            <tr>
+                <td><strong>Save and Verify Unsaved State</strong></td>
+                <td>1. Complete flow configuration<br>2. Click "Done" button<br>3. Dialog closes<br>4. Flow appears in list<br>5. Verify not yet active (unsaved state)</td>
+                <td>Flow saves in unsaved state. Appears in flow list but not yet active. Visual indicator (e.g., "Unsaved" badge or gray styling) shows unsaved status. Flow becomes active only after clicking "Update Approval Flows".</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-save">Save flow</a></td>
+            </tr>
+        </table>
+        
+        <h3>Screenshots</h3>
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-02-configure-criteria-dialog.png" alt="Criteria Dialog" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Configure Criteria Dialog</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-03-data-points-dropdown.png" alt="Data Points" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Data Points Dropdown</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-04-operation-options.png" alt="Operations" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Criteria Operation Options</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-06-approver-roles-dropdown.png" alt="Roles" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Approver Roles Dropdown</div>
+            </div>
+        </div>
+        
+        <!-- SECTION 3: MANAGE & EDIT FLOWS -->
+        <div class="section-break"></div>
+        <h2>SCENARIO 3: Edit, Delete & Manage Flow Priority</h2>
+        <h3>Test Cases</h3>
+        <table>
+            <tr>
+                <th>Scenario</th>
+                <th>Steps</th>
+                <th>Expected Result</th>
+                <th style="width: 60px;">✓</th>
+                <th>Help Article</th>
+            </tr>
+            <tr>
+                <td><strong>Edit Existing Advanced Flow</strong></td>
+                <td>1. Find existing flow in list<br>2. Click edit icon (pencil)<br>3. Edit dialog opens<br>4. Modify criteria value: 5000 to 10000<br>5. Click "Done"</td>
+                <td>Edit dialog opens with pre-populated flow data. All fields editable (name, description, criteria, steps, approvers). Changes saved to unsaved state. Flow remains inactive until "Update Approval Flows" clicked. Can modify any aspect of flow.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-edit">Edit flow</a></td>
+            </tr>
+            <tr>
+                <td><strong>Delete Approval Flow</strong></td>
+                <td>1. Find flow to delete<br>2. Click delete/trash icon<br>3. Confirmation dialog appears<br>4. Click "Confirm" to delete<br>5. Flow removed from list</td>
+                <td>Delete confirmation dialog appears with warning that action is permanent. After confirmation, flow removed from list immediately. Deletion is unsaved state until "Update Approval Flows" clicked. No undo function available.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-delete">Delete flow</a></td>
+            </tr>
+            <tr>
+                <td><strong>Reorder Flows by Priority</strong></td>
+                <td>1. Multiple advanced flows exist<br>2. Click ellipsis menu on a flow<br>3. See priority options<br>4. Click "Move up in priority"<br>5. Flow position changes</td>
+                <td>Ellipsis menu shows "Move up in priority" and "Move down in priority" options. Flows evaluated in displayed priority order. First matching flow applied. Reordering changes evaluation sequence. Most specific flows should be higher priority.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-priority">Set priority</a></td>
+            </tr>
+            <tr>
+                <td><strong>Configure Default Flow Approvers</strong></td>
+                <td>1. Scroll to "Default approval flow" section<br>2. Under "Else" section<br>3. Click "Add step"<br>4. Add approvers (e.g., Line Manager)<br>5. Leave default flow simple</td>
+                <td>Default flow section shows "Else" badge. Can add approval steps and approvers just like advanced flows. Default flow acts as fallback when no advanced flows match. Should be simpler than advanced flows. Every request type should have default configured.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-default">Default flow</a></td>
+            </tr>
+            <tr>
+                <td><strong>Activate All Changes</strong></td>
+                <td>1. After making flow changes<br>2. Scroll to bottom of page<br>3. Click "Update Approval Flows" button<br>4. Confirmation message shows<br>5. All flows now active</td>
+                <td>"Update Approval Flows" button triggers activation. Confirmation message appears. All unsaved changes become active simultaneously. New requests now route through updated flows. Already-in-progress requests unaffected.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-activate">Activate changes</a></td>
+            </tr>
+        </table>
+        
+        <h3>Screenshots</h3>
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-07-edit-dialog-with-existing-flow.png" alt="Edit Dialog" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Edit Existing Flow Dialog</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-08-ellipsis-menu-move-down-priority.png" alt="Priority Menu" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Flow Priority Management Menu</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-09-delete-confirmation-dialog.png" alt="Delete Confirmation" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Delete Confirmation Dialog</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-05-add-step-approver-roles.png" alt="Add Step" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Add Step and Approver Roles</div>
+            </div>
+        </div>
+        
+        <!-- SECTION 4: TEST AUTOMATIC ROUTING -->
+        <div class="section-break"></div>
+        <h2>SCENARIO 4: Test Automatic Request Routing</h2>
+        <h3>Test Cases</h3>
+        <table>
+            <tr>
+                <th>Scenario</th>
+                <th>Steps</th>
+                <th>Expected Result</th>
+                <th style="width: 60px;">✓</th>
+                <th>Help Article</th>
+            </tr>
+            <tr>
+                <td><strong>Submit Request Matching Advanced Flow</strong></td>
+                <td>1. As employee, submit expense<br>2. Amount: $8,000 (matches flow criteria "Amount > 5000")<br>3. Department: Finance<br>4. Submit request<br>5. Check routing</td>
+                <td>Request submitted successfully. System evaluates advanced flows in priority order. First matching flow applied. Request routed to configured approvers for that advanced flow (e.g., Finance Manager). Approver receives notification. Routing automatic.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-match-flow">Matching flow</a></td>
+            </tr>
+            <tr>
+                <td><strong>Submit Request Using Default Flow</strong></td>
+                <td>1. As employee, submit expense<br>2. Amount: $2,000 (no advanced flow matches)<br>3. Department: HR<br>4. Submit request<br>5. Check routing to default</td>
+                <td>Request submitted. No advanced flow criteria match. Default flow applies automatically as fallback. Request routed to default approvers (e.g., Line Manager). Default flow acts as safety net. Ensures all requests have routing path.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-default-route">Default routing</a></td>
+            </tr>
+            <tr>
+                <td><strong>Multi-Step Approval Routing</strong></td>
+                <td>1. Configure flow with 2 steps<br>2. Step 1: Department Manager<br>3. Step 2: Finance Manager<br>4. Submit request matching flow<br>5. Verify sequential routing</td>
+                <td>Request routes to Step 1 approver first. After Step 1 approval, routes to Step 2 approver automatically. Each step executed sequentially. Sequential steps ensure all approvers approve before completion. System advances through steps correctly.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-multi-step">Multi-step approval</a></td>
+            </tr>
+            <tr>
+                <td><strong>Parallel Approvers Within Step</strong></td>
+                <td>1. Configure flow with 1 step<br>2. Add 2 approvers to step (Finance Manager, Department Manager)<br>3. Submit matching request<br>4. Both approvers notified<br>5. Approval from any one sufficient</td>
+                <td>Both approvers receive request simultaneously (parallel routing). Either approver can approve request (OR logic). If one approver rejects, request is rejected immediately. Parallel approvers reduce bottlenecks when key person unavailable. System distributes correctly.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-parallel">Parallel approvers</a></td>
+            </tr>
+            <tr>
+                <td><strong>Request Rejection Stops Process</strong></td>
+                <td>1. Request in approval at Step 1<br>2. Step 1 approver rejects request<br>3. Check request status<br>4. Does NOT proceed to Step 2<br>5. Employee notified of rejection</td>
+                <td>Request rejected at any step stops entire approval process immediately. Does not advance to subsequent steps. Employee notified of rejection reason. Request marked as rejected. Cannot be re-evaluated or advanced by other approvers. Rejection is final.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><a href="#article-reject">Rejection handling</a></td>
+            </tr>
+        </table>
+        
+        <h3>Screenshots</h3>
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/02-dashboard-loaded.png" alt="Dashboard" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Dashboard with Request Submission</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/01-login-page.png" alt="Login" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">System Access & Navigation</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-05-add-step-approver-roles.png" alt="Steps Config" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Multi-Step Approval Configuration</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-06-approver-roles-dropdown.png" alt="Approver Selection" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Parallel Approver Setup</div>
+            </div>
+        </div>
+        
+        <!-- SIGN-OFF -->
+        <div class="section-break"></div>
+        <h2>UAT Sign-Off</h2>
+        
+        <table class="sign-off-table">
+            <tr>
+                <th>Role</th>
+                <th>Name</th>
+                <th>Signature</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <td>Business Owner</td>
+                <td style="height: 35px;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>QA Lead</td>
+                <td style="height: 35px;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>UAT Lead</td>
+                <td style="height: 35px;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        
+        <div class="summary-box">
+            <h3>Test Summary</h3>
+            <p><strong>Total Test Cases:</strong> _____ | <strong>Passed:</strong> _____ | <strong>Failed:</strong> _____ | <strong>Issues Found:</strong> _____</p>
+            <p><strong>Ready for Production:</strong> ☐ Yes &nbsp;&nbsp;&nbsp; ☐ No</p>
+            <p><strong>Notes:</strong> (Any blockers or issues to address)</p>
+            <p style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd; color: #666;">_________________________________________________________________</p>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>Approval Flows UAT Testing Guide | Version 1.0 | February 2026</p>
+            <p>Bayzat HRMS Platform | Internal Use Only</p>
+        </div>
+    </div>
+</body>
+</html>

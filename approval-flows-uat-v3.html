@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approval Flows - UAT Testing Guide</title>
+    <style>
+        :root {
+            --bayzat-purple: #9647FF;
+            --bayzat-dark-purple: #4A378B;
+            --bayzat-charcoal: #242424;
+            --bayzat-black: #000000;
+            --bayzat-white: #FFFFFF;
+            --bayzat-stone: #E8E8E8;
+            --bayzat-gray-1: #C8C8C8;
+            --font-headline: Arial, Helvetica, sans-serif;
+            --font-body: Arial, Helvetica, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 13px;
+            line-height: 1.3;
+            color: var(--bayzat-black);
+            background: var(--bayzat-stone);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bayzat-white);
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: var(--bayzat-purple);
+            color: var(--bayzat-white);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: var(--font-headline);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 28px;
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.95;
+            line-height: 1.3;
+        }
+
+        .doc-meta {
+            background: var(--bayzat-stone);
+            border-left: 4px solid var(--bayzat-purple);
+            padding: 12px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--bayzat-black);
+        }
+
+        h2 {
+            color: var(--bayzat-white);
+            background: var(--bayzat-purple);
+            padding: 10px 15px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            border-left: 4px solid var(--bayzat-dark-purple);
+            font-family: var(--font-headline);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        h3 {
+            color: var(--bayzat-purple);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: var(--font-headline);
+        }
+
+        p {
+            margin-bottom: 12px;
+            line-height: 1.3;
+            color: var(--bayzat-black);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            border: 1px solid var(--bayzat-gray-1);
+        }
+
+        th {
+            background: var(--bayzat-purple);
+            color: var(--bayzat-white);
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--bayzat-gray-1);
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .scope-table th {
+            background: var(--bayzat-purple);
+        }
+
+        .sign-off-table {
+            margin-top: 20px;
+        }
+
+        .sign-off-table th {
+            background: var(--bayzat-purple);
+            color: white;
+        }
+
+        .sign-off-table td {
+            border: 1px solid var(--bayzat-gray-1);
+            height: 50px;
+        }
+
+        .summary-box {
+            background: var(--bayzat-stone);
+            border-left: 4px solid var(--bayzat-purple);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .summary-box h3 {
+            margin-top: 0;
+            color: var(--bayzat-charcoal);
+        }
+
+        .section-break {
+            height: 2px;
+            background: linear-gradient(to right, var(--bayzat-purple), transparent);
+            margin: 40px 0;
+        }
+
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .screenshot-item {
+            border: 1px solid var(--bayzat-gray-1);
+            border-radius: 4px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #f5f5f5;
+        }
+
+        .screenshot-label {
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--bayzat-purple);
+            background: var(--bayzat-stone);
+            border-top: 1px solid var(--bayzat-gray-1);
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--bayzat-gray-1);
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+
+        a {
+            color: var(--bayzat-purple);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="display:inline-block;margin-right:10px;">
+                <circle cx="20" cy="20" r="18" stroke="white" stroke-width="2"/>
+                <text x="20" y="25" font-size="20" font-weight="bold" fill="white" text-anchor="middle">B</text>
+            </svg>
+            <h1>Approval Flows UAT</h1>
+            <p>Testing Guide</p>
+        </div>
+
+        <!-- INTRODUCTION -->
+        <h2>Introduction</h2>
+        <p>This guide walks you through testing the Approval Flows module in Bayzat. Approval Flows let you define who approves what &mdash; so when an employee submits a leave request, expense claim, loan, or any other request, it automatically goes to the right person based on your company's policies.</p>
+        <p>The goal of this UAT is to confirm that your approval rules work as expected: the right requests reach the right approvers, in the right order, every time. You'll test setting up rules, changing them, and verifying that real requests route correctly.</p>
+
+        <!-- SCOPE -->
+        <h2>Scope</h2>
+        <h3>What We're Testing</h3>
+        <table class="scope-table">
+            <tr>
+                <th style="background: #2D8659;">WHAT WE'RE TESTING</th>
+            </tr>
+            <tr>
+                <td>Setting up approval rules for different request types (Leave, Expense, Loan, etc.)</td>
+            </tr>
+            <tr>
+                <td>Defining conditional rules (e.g., expenses over AED 5,000 need Finance Manager approval)</td>
+            </tr>
+            <tr>
+                <td>Configuring multi-step and parallel approvals</td>
+            </tr>
+            <tr>
+                <td>Editing and reprioritising approval rules when policies change</td>
+            </tr>
+            <tr>
+                <td>Verifying that employee requests route to the correct approvers</td>
+            </tr>
+        </table>
+
+        <!-- SCENARIO 1 -->
+        <div class="section-break"></div>
+        <h2>SCENARIO 1: Set Up Your Approval Rules</h2>
+        <p>Start by configuring your default approval flow &mdash; this is the baseline that handles every request unless a more specific rule applies. Then layer on a conditional rule for cases that need different handling (e.g., high-value expenses going to Finance Manager instead of Line Manager).</p>
+        <h3>Test Cases</h3>
+        <table>
+            <tr>
+                <th>What You're Testing</th>
+                <th>Steps</th>
+                <th>What Should Happen</th>
+                <th style="width: 60px;">&#x2713;</th>
+            </tr>
+            <tr>
+                <td><strong>Set up the default approval flow</strong></td>
+                <td>1. Go to Automations &gt; Approval Flows<br>2. Select the "Expense" tab<br>3. Scroll to "Default approval flow"<br>4. Click "Add step"<br>5. Add approver: Line Manager<br>6. Click "Done"</td>
+                <td>The default flow shows Line Manager as the approver. This is your baseline &mdash; every expense request will go to the employee's Line Manager unless a more specific rule matches first.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td><strong>Create a conditional approval rule</strong></td>
+                <td>1. On the same tab, in the "Advanced approval flow" section<br>2. Click "+ Add advance flow"<br>3. Name it (e.g., "High-value Finance expenses")<br>4. Add criteria: Amount &gt; 5,000 AND Department = Finance<br>5. Add approval step: Finance Manager<br>6. Click "Done"</td>
+                <td>The rule appears in the Advanced flows list above the default. It shows the criteria you set and the approver you assigned. Click "Update Approval Flows" at the bottom of the page to save your changes. New requests will now follow the updated approval paths &mdash; high-value Finance expenses go to Finance Manager, everything else goes to Line Manager.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+        </table>
+
+        <h3>Screenshots</h3>
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/03-approval-flows-page.png" alt="Main Page" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Approval Flows Main Page</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/04-advanced-flow-builder.png" alt="Flow Builder" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Advanced Flow Builder</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/05-criteria-data-points.png" alt="Data Points" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Criteria Data Points</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/06-approver-roles.png" alt="Approver Roles" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Approver Roles</div>
+            </div>
+        </div>
+
+        <!-- SCENARIO 2 -->
+        <div class="section-break"></div>
+        <h2>SCENARIO 2: Change Approval Rules When Policies Change</h2>
+        <p>Business policies evolve. In this scenario, you'll update an existing rule, remove one that's no longer needed, and reorder priorities to make sure the most important rules are evaluated first.</p>
+        <h3>Test Cases</h3>
+        <table>
+            <tr>
+                <th>What You're Testing</th>
+                <th>Steps</th>
+                <th>What Should Happen</th>
+                <th style="width: 60px;">&#x2713;</th>
+            </tr>
+            <tr>
+                <td><strong>Update an approval threshold</strong></td>
+                <td>1. Find your existing rule (e.g., "High-value Finance expenses")<br>2. Click the edit icon<br>3. Change the amount threshold from 5,000 to 10,000<br>4. Click "Done"<br>5. Click "Update Approval Flows" to publish</td>
+                <td>The rule now shows the updated threshold. After publishing, only expenses over AED 10,000 will trigger this rule. Expenses between 5,000 and 10,000 will now fall through to the default approver.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td><strong>Remove a rule that's no longer needed</strong></td>
+                <td>1. Find the rule to remove<br>2. Click the delete icon<br>3. Confirm deletion<br>4. Click "Update Approval Flows" to publish</td>
+                <td>The rule is removed from the list. After publishing, requests that previously matched this rule will now fall through to the next matching rule or the default.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td><strong>Reorder rule priority</strong></td>
+                <td>1. You have multiple rules on the same tab<br>2. Click the ellipsis menu on a rule<br>3. Select "Move up in priority"<br>4. Click "Update Approval Flows" to publish</td>
+                <td>The rule moves up in the list. Rules are evaluated top-to-bottom &mdash; the first match wins. This lets you put more specific rules above general ones (e.g., "Finance expenses over 10,000" above "All expenses over 5,000").</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+        </table>
+
+        <h3>Screenshots</h3>
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-07-edit-dialog-with-existing-flow.png" alt="Edit Dialog" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Edit Existing Rule</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-08-ellipsis-menu-move-down-priority.png" alt="Priority Menu" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Priority Management</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-09-delete-confirmation-dialog.png" alt="Delete Confirmation" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Delete Confirmation</div>
+            </div>
+        </div>
+
+        <!-- SCENARIO 3 -->
+        <div class="section-break"></div>
+        <h2>SCENARIO 3: Verify Requests Route to the Right People</h2>
+        <p>This is the most important scenario. You'll submit real requests and confirm they land with the correct approver based on your configured rules.</p>
+        <h3>Test Cases</h3>
+        <table>
+            <tr>
+                <th>What You're Testing</th>
+                <th>Steps</th>
+                <th>What Should Happen</th>
+                <th style="width: 60px;">&#x2713;</th>
+            </tr>
+            <tr>
+                <td><strong>Request matches a specific rule</strong></td>
+                <td>1. Log in as an employee<br>2. Submit an expense claim for AED 8,000 (matches your "Amount > 5,000" rule)<br>3. Check who received the approval request</td>
+                <td>The request goes directly to the Finance Manager (or whoever you configured as the approver for this rule). The approver receives a notification. The employee can see the request is pending approval.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td><strong>Request falls through to default approver</strong></td>
+                <td>1. Log in as an employee<br>2. Submit an expense claim for AED 2,000 (doesn't match any specific rule)<br>3. Check who received the approval request</td>
+                <td>No specific rule matches, so the request goes to the default approver (Line Manager). This confirms the fallback works correctly and no requests get stuck without an approver.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td><strong>Multi-step approval follows the correct sequence</strong></td>
+                <td>1. Set up a rule with 2 steps: Step 1 = Department Manager, Step 2 = Finance Manager<br>2. Submit a matching request<br>3. Approve at Step 1<br>4. Check if Step 2 approver receives it next</td>
+                <td>Step 1 approver receives the request first. After they approve, it automatically moves to Step 2. The Finance Manager only sees the request after the Department Manager has approved it.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td><strong>Parallel approvers both receive the request</strong></td>
+                <td>1. Set up a rule with 1 step containing 2 approvers (Finance Manager + Department Manager)<br>2. Submit a matching request<br>3. Check that both approvers are notified</td>
+                <td>Both approvers receive the request at the same time. Either one can approve it. This is useful when you want flexibility &mdash; whoever is available first can action the request.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td><strong>A rejected request stops the process</strong></td>
+                <td>1. Submit a request that goes through multi-step approval<br>2. The Step 1 approver rejects it<br>3. Check if it still reaches Step 2</td>
+                <td>The request is marked as rejected. It does not move to Step 2. The employee is notified of the rejection. This confirms that a rejection at any point stops the entire chain.</td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+        </table>
+
+        <h3>Screenshots</h3>
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/02-dashboard-loaded.png" alt="Dashboard" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Request Submission</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-05-add-step-approver-roles.png" alt="Steps Config" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Multi-Step Configuration</div>
+            </div>
+            <div class="screenshot-item">
+                <img src="https://wliqznyleighuggvtidj.supabase.co/storage/v1/object/public/user-guide-images/approval-flow/advanced-flow-06-approver-roles-dropdown.png" alt="Approver Selection" style="width: 100%; border: none; border-radius: 4px;">
+                <div class="screenshot-label">Approver Selection</div>
+            </div>
+        </div>
+
+        <!-- SIGN-OFF -->
+        <div class="section-break"></div>
+        <h2>UAT Sign-Off</h2>
+
+        <table class="sign-off-table">
+            <tr>
+                <th>Role</th>
+                <th>Name</th>
+                <th>Signature</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <td>Business Owner</td>
+                <td style="height: 35px;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>QA Lead</td>
+                <td style="height: 35px;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>UAT Lead</td>
+                <td style="height: 35px;"></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="summary-box">
+            <h3>Test Summary</h3>
+            <p><strong>Total Test Cases:</strong> 11 | <strong>Passed:</strong> _____ | <strong>Failed:</strong> _____ | <strong>Issues Found:</strong> _____</p>
+            <p><strong>Ready for Production:</strong> &#x2610; Yes &nbsp;&nbsp;&nbsp; &#x2610; No</p>
+            <p><strong>Notes:</strong> (Any blockers or issues to address)</p>
+            <p style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd; color: #666;">_________________________________________________________________</p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>Approval Flows UAT Testing Guide | Version 3.0 | February 2026</p>
+            <p>Bayzat HRMS Platform</p>
+        </div>
+    </div>
+</body>
+</html>
