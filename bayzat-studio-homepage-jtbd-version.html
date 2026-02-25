@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bayzat Studio — Make it work better.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #9647FF; --blue: #475CFF; --bg: #111111; --card-bg: #1C1C1C; --card-2: #242424;
+    --text-hi: #FFFFFF; --text-mid: #A0A0A0; --text-lo: #5A5A5A;
+    --gradient: linear-gradient(90deg,#9647FF 0%,#475CFF 100%);
+    --gradient-diag: linear-gradient(135deg,#9647FF 0%,#475CFF 100%);
+    --glass-fill: linear-gradient(144.5deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0) 100%);
+    --border: rgba(255,255,255,0.07); --border-bright: rgba(150,71,255,0.3);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;} html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text-hi);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden;}
+  h1,h2,h3,h4{font-family:'Syne',sans-serif;font-weight:700;line-height:1.1;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(17,17,17,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .nav-logo-mark{width:32px;height:32px;border-radius:8px;background:var(--gradient-diag);display:flex;align-items:center;justify-content:center;}
+  .nav-logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+  .nav-logo-text span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .nav-links{display:flex;gap:36px;list-style:none;}
+  .nav-links a{color:var(--text-mid);text-decoration:none;font-size:14px;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--text-hi);}
+  .nav-right{display:flex;gap:10px;align-items:center;}
+  .nav-cta-ghost{color:var(--text-mid);border:1px solid var(--border);padding:9px 20px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;}
+  .nav-cta-ghost:hover{border-color:rgba(255,255,255,0.2);color:white;}
+  .nav-cta{background:var(--gradient);color:white;border:none;padding:10px 22px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.2s,transform 0.2s;text-decoration:none;display:inline-flex;align-items:center;}
+  .nav-cta:hover{opacity:0.85;transform:translateY(-1px);}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:140px 60px 100px;}
+  .blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.18;pointer-events:none;}
+  .blob-1{width:700px;height:700px;background:#9647FF;top:-200px;left:-200px;animation:blobFloat 8s ease-in-out infinite;}
+  .blob-2{width:600px;height:600px;background:#475CFF;bottom:-150px;right:-150px;animation:blobFloat 10s ease-in-out infinite reverse;}
+  @keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-20px) scale(1.04);}66%{transform:translate(-20px,15px) scale(0.97);}}
+  .hero-inner{max-width:900px;text-align:center;position:relative;z-index:2;}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(150,71,255,0.1);border:1px solid rgba(150,71,255,0.2);padding:6px 16px;border-radius:100px;font-size:12px;font-weight:500;color:#C49AFF;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:32px;}
+  .hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--purple);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+  .hero h1{font-size:clamp(42px,6vw,78px);letter-spacing:-0.03em;margin-bottom:28px;}
+  .gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero-sub{font-size:17px;color:var(--text-mid);max-width:620px;margin:0 auto 48px;font-weight:300;line-height:1.8;}
+  .hero-sub strong{color:rgba(255,255,255,0.8);font-weight:400;}
+  .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:56px;}
+  .btn-primary{background:var(--gradient);color:white;border:none;padding:16px 32px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:8px;text-decoration:none;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 60px rgba(150,71,255,0.28);}
+  .btn-ghost{background:transparent;color:var(--text-mid);border:1px solid var(--border);padding:16px 32px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:all 0.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.2);color:white;}
+  .fade-up{opacity:0;transform:translateY(28px);animation:fadeUp 0.7s ease forwards;}
+  .d1{animation-delay:0.05s;}.d2{animation-delay:0.15s;}.d3{animation-delay:0.25s;}.d4{animation-delay:0.4s;}.d5{animation-delay:0.55s;}.d6{animation-delay:0.7s;}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+  /* HERO PAIN PILLS */
+  .hero-pain-strip{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .pain-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:7px 14px;border-radius:100px;font-size:12px;color:var(--text-mid);}
+  .pain-pill-strike{text-decoration:line-through;color:var(--text-lo);}
+  .pain-pill-arrow{color:rgba(150,71,255,0.7);font-size:10px;}
+  .pain-pill-result{color:rgba(255,255,255,0.7);}
+
+  /* VALUE STRIP */
+  .value-strip{background:var(--card-bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 60px;position:relative;z-index:1;}
+  .value-strip-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:0;flex-wrap:wrap;}
+  .vs-stat{display:flex;flex-direction:column;align-items:center;padding:0 32px;flex-shrink:0;}
+  .vs-num{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.03em;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px;}
+  .vs-num sup{font-size:18px;}
+  .vs-label{font-size:11px;color:var(--text-mid);text-align:center;white-space:nowrap;}
+  .vs-div{width:1px;height:36px;background:var(--border);flex-shrink:0;}
+  .vs-usps{display:flex;flex-wrap:wrap;gap:8px;padding-left:32px;flex:1;}
+  .vs-usp{font-size:11px;color:var(--text-mid);background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:5px 12px;border-radius:100px;white-space:nowrap;}
+  @media(max-width:900px){.value-strip{padding:24px;}.value-strip-inner{gap:16px;}.vs-div{display:none;}.vs-stat{padding:0 16px;}.vs-usps{padding-left:0;}}
+
+  /* SECTION COMMON */
+  section{padding:100px 60px;position:relative;z-index:1;}
+  .section-eyebrow{font-size:11px;font-weight:500;color:var(--purple);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;}
+  .section-title{font-size:clamp(28px,3.5vw,46px);letter-spacing:-0.02em;margin-bottom:14px;max-width:580px;}
+  .section-sub{font-size:15px;color:var(--text-mid);max-width:540px;line-height:1.75;}
+  .section-header{margin-bottom:56px;}
+  .divider{height:1px;background:var(--border);margin:0 60px;}
+
+  /* ── MICRO JOBS / AHA SECTION ── */
+  .micro-jobs-section{background:var(--bg);}
+  .mj-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .mj-tabs{display:flex;flex-direction:column;gap:4px;}
+  .mj-tab{display:flex;gap:18px;padding:22px 24px;border-radius:14px;border:1px solid transparent;cursor:pointer;transition:all 0.25s;align-items:flex-start;}
+  .mj-tab.active{background:var(--card-bg);border-color:var(--border-bright);}
+  .mj-tab:not(.active):hover{background:rgba(255,255,255,0.02);}
+  .mj-tab-num{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text-lo);padding-top:3px;flex-shrink:0;transition:color 0.25s;}
+  .mj-tab.active .mj-tab-num{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .mj-tab-body h4{font-size:15px;margin-bottom:5px;color:var(--text-mid);transition:color 0.25s;}
+  .mj-tab.active .mj-tab-body h4{color:var(--text-hi);}
+  .mj-tab-body p{font-size:13px;color:var(--text-lo);line-height:1.65;transition:color 0.25s;}
+  .mj-tab.active .mj-tab-body p{color:var(--text-mid);}
+
+  .mj-panel{position:relative;}
+  .mj-scenario{display:none;animation:panelFade 0.35s ease;}
+  .mj-scenario.active{display:block;}
+  @keyframes panelFade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .aha-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+  .aha-card-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .aha-card-header-left{display:flex;align-items:center;gap:10px;}
+  .aha-dot{width:10px;height:10px;border-radius:50%;}
+  .aha-label{font-size:11px;color:var(--text-lo);font-weight:500;letter-spacing:0.06em;}
+  .aha-badge{font-size:10px;background:rgba(150,71,255,0.12);border:1px solid rgba(150,71,255,0.2);color:#C49AFF;padding:3px 10px;border-radius:100px;letter-spacing:0.04em;font-weight:500;}
+  .aha-card-body{padding:24px;}
+  .before-after{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+  .ba-block{border-radius:12px;padding:16px;}
+  .ba-block.before{background:rgba(255,80,80,0.06);border:1px solid rgba(255,80,80,0.12);}
+  .ba-block.after{background:rgba(71,92,255,0.06);border:1px solid rgba(71,92,255,0.15);}
+  .ba-label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+  .ba-block.before .ba-label{color:rgba(255,100,100,0.7);}
+  .ba-block.after .ba-label{color:rgba(100,130,255,0.8);}
+  .ba-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-mid);line-height:1.5;margin-bottom:7px;}
+  .ba-item:last-child{margin-bottom:0;}
+  .ba-item-icon{flex-shrink:0;margin-top:1px;font-size:11px;}
+  .aha-outcome{display:flex;align-items:center;gap:12px;background:rgba(150,71,255,0.06);border:1px solid rgba(150,71,255,0.15);border-radius:10px;padding:13px 16px;}
+  .aha-outcome-icon{font-size:18px;flex-shrink:0;}
+  .aha-outcome p{font-size:12px;color:var(--text-mid);line-height:1.5;}
+  .aha-outcome strong{color:white;font-weight:500;}
+
+  /* ── VALUE DELIVERY ── */
+  .value-section{background:var(--card-bg);}
+  .value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .value-card{border:1px solid var(--border);border-radius:18px;padding:32px 28px;position:relative;overflow:hidden;background:var(--bg);transition:border-color 0.3s;}
+  .value-card:hover{border-color:var(--border-bright);}
+  .value-card-accent{position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient);}
+  .value-metric{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;letter-spacing:-0.03em;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:6px;}
+  .value-metric-label{font-size:11px;color:var(--text-lo);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:20px;}
+  .value-card h3{font-size:17px;margin-bottom:10px;}
+  .value-card p{font-size:13px;color:var(--text-mid);line-height:1.7;}
+  .value-card-tag{display:inline-flex;align-items:center;gap:5px;margin-top:18px;font-size:11px;color:var(--text-lo);background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:4px 10px;border-radius:100px;}
+
+  /* ── WHY WE DELIVER ── */
+  .why-section{background:var(--bg);}
+  .why-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+  .why-left .section-title{max-width:420px;}
+  .capability-list{display:flex;flex-direction:column;gap:0;}
+  .cap-item{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:22px 0;border-bottom:1px solid var(--border);align-items:start;}
+  .cap-item:first-child{padding-top:0;}
+  .cap-item:last-child{border-bottom:none;padding-bottom:0;}
+  .cap-icon{width:40px;height:40px;border-radius:10px;background:rgba(150,71,255,0.1);border:1px solid rgba(150,71,255,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .cap-body h4{font-size:14px;margin-bottom:5px;}
+  .cap-body p{font-size:13px;color:var(--text-mid);line-height:1.65;}
+  .why-right{display:flex;flex-direction:column;gap:14px;}
+  .why-stat-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:24px;}
+  .why-stat-card-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
+  .why-stat-card p{font-size:13px;color:var(--text-mid);line-height:1.6;}
+
+  /* ── EMOTIONS / POINT B ── */
+  .emotions-section{background:var(--card-bg);overflow:hidden;}
+  .emotions-inner{max-width:1100px;margin:0 auto;}
+  .emotions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:0;}
+  .emotion-card{border-radius:18px;padding:32px 28px;border:1px solid var(--border);position:relative;overflow:hidden;}
+  .emotion-card-1{background:linear-gradient(135deg,rgba(150,71,255,0.08) 0%,rgba(17,17,17,0) 60%);}
+  .emotion-card-2{background:linear-gradient(135deg,rgba(71,92,255,0.08) 0%,rgba(17,17,17,0) 60%);}
+  .emotion-card-3{background:linear-gradient(135deg,rgba(120,80,255,0.08) 0%,rgba(17,17,17,0) 60%);}
+  .emotion-role{font-size:11px;font-weight:500;color:var(--text-lo);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;}
+  .emotion-feeling{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.01em;margin-bottom:14px;line-height:1.2;}
+  .emotion-card-1 .emotion-feeling{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .emotion-card-2 .emotion-feeling{background:linear-gradient(90deg,#475CFF,#9647FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .emotion-card-3 .emotion-feeling{background:linear-gradient(90deg,#7040FF,#475CFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .emotion-desc{font-size:13px;color:var(--text-mid);line-height:1.7;}
+  .emotion-from{margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--text-lo);display:flex;align-items:center;gap:6px;}
+  .emotion-from-arrow{color:var(--text-lo);font-size:10px;}
+
+  /* ── BARRIERS ── */
+  .barriers-section{background:var(--bg);}
+  .barriers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .barrier-card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:32px 28px;transition:border-color 0.3s;}
+  .barrier-card:hover{border-color:var(--border-bright);}
+  .barrier-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:18px;}
+  .barrier-label{font-size:11px;font-weight:600;color:rgba(255,100,100,0.6);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+  .barrier-card h3{font-size:15px;color:var(--text-mid);margin-bottom:14px;line-height:1.4;}
+  .barrier-resolve{background:rgba(150,71,255,0.07);border:1px solid rgba(150,71,255,0.15);border-radius:10px;padding:13px 15px;}
+  .barrier-resolve-label{font-size:10px;font-weight:600;color:#C49AFF;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+  .barrier-resolve p{font-size:12px;color:var(--text-mid);line-height:1.6;}
+
+  /* PRODUCTS */
+  .products-section{background:var(--card-bg);}
+  .products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  .product-card{background:var(--glass-fill);border:1px solid var(--border);border-radius:18px;padding:32px 24px;transition:all 0.3s;}
+  .product-card:hover{border-color:var(--border-bright);transform:translateY(-3px);}
+  .product-icon{width:44px;height:44px;border-radius:10px;background:rgba(150,71,255,0.12);border:1px solid rgba(150,71,255,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px;}
+  .product-card h3{font-size:16px;margin-bottom:8px;}
+  .product-card p{font-size:13px;color:var(--text-mid);line-height:1.65;}
+  .bundle-notice{background:rgba(150,71,255,0.05);border:1px solid rgba(150,71,255,0.14);border-radius:12px;padding:16px 22px;display:flex;align-items:flex-start;gap:12px;}
+  .bundle-notice p{font-size:13px;color:var(--text-mid);line-height:1.65;}
+
+  /* CATEGORIES */
+  .categories-section{background:var(--bg);}
+  .categories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .category-card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:36px 32px;position:relative;overflow:hidden;cursor:pointer;transition:all 0.3s;display:flex;flex-direction:column;text-decoration:none;color:inherit;}
+  .category-card:first-child{grid-column:span 2;}
+  .category-card:hover{border-color:var(--border-bright);transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,0,0,0.4);}
+  .cat-blob{position:absolute;width:280px;height:280px;border-radius:50%;filter:blur(80px);opacity:0;transition:opacity 0.4s;pointer-events:none;top:-80px;right:-80px;}
+  .category-card:hover .cat-blob{opacity:0.1;}
+  .cat-icon{font-size:28px;margin-bottom:20px;display:block;}
+  .category-card h3{font-size:20px;margin-bottom:10px;letter-spacing:-0.01em;}
+  .category-card p{font-size:13px;color:var(--text-mid);line-height:1.7;flex:1;}
+  .cat-footer{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:18px;border-top:1px solid var(--border);}
+  .cat-count{font-size:12px;color:var(--text-lo);}
+  .cat-arrow{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-mid);font-size:14px;transition:all 0.3s;}
+  .category-card:hover .cat-arrow{background:var(--gradient);border-color:transparent;color:white;transform:rotate(45deg);}
+  .grow-note{margin-top:20px;font-size:13px;color:var(--text-lo);display:flex;align-items:center;gap:10px;}
+  .grow-note::before{content:'';display:inline-block;width:20px;height:1px;background:var(--text-lo);flex-shrink:0;}
+
+  /* PROCESS */
+  .process-section{background:var(--card-bg);}
+  .process-paths{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:60px;}
+  .path-card{background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:32px 28px;position:relative;}
+  .path-card.featured{border-color:var(--border-bright);}
+  .path-tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--gradient);font-size:10px;font-weight:600;letter-spacing:0.08em;padding:4px 14px;border-radius:0 0 10px 10px;white-space:nowrap;text-transform:uppercase;}
+  .path-icon{font-size:26px;margin-bottom:18px;display:block;}
+  .path-card h3{font-size:16px;margin-bottom:10px;}
+  .path-card p{font-size:13px;color:var(--text-mid);line-height:1.7;}
+  .process-steps{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .steps-list{display:flex;flex-direction:column;}
+  .step-item{display:flex;gap:0;padding-bottom:32px;border-left:2px solid rgba(150,71,255,0.15);padding-left:28px;position:relative;margin-left:10px;}
+  .step-item:last-child{padding-bottom:0;border-left-color:transparent;}
+  .step-num-circle{position:absolute;left:-10px;top:0;width:20px;height:20px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;font-family:'Syne',sans-serif;}
+  .step-item h4{font-size:15px;margin-bottom:6px;}
+  .step-item p{font-size:13px;color:var(--text-mid);line-height:1.7;}
+
+  /* REQUIREMENTS CARD */
+  .form-card{background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:36px;position:relative;overflow:hidden;}
+  .form-card-blob{position:absolute;width:350px;height:350px;border-radius:50%;background:var(--purple);filter:blur(100px);opacity:0.07;top:-100px;right:-80px;pointer-events:none;}
+  .form-card-inner{position:relative;z-index:1;}
+  .form-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;}
+  .form-desc{font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:24px;}
+  .form-captures{background:rgba(150,71,255,0.07);border:1px solid rgba(150,71,255,0.15);border-radius:12px;padding:16px 18px;margin-bottom:20px;}
+  .form-captures-label{font-size:11px;color:#C49AFF;font-weight:500;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;}
+  .form-capture-item{display:flex;gap:10px;font-size:13px;color:var(--text-mid);line-height:1.5;margin-bottom:8px;}
+  .form-capture-item:last-child{margin-bottom:0;}
+  .form-capture-item span:first-child{color:var(--purple);flex-shrink:0;}
+  .form-cta-primary{background:var(--gradient);border:none;width:100%;padding:14px;border-radius:10px;color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:10px;transition:opacity 0.2s;display:block;text-align:center;text-decoration:none;}
+  .form-cta-primary:hover{opacity:0.85;}
+  .form-cta-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:10px;border:1px solid var(--border);color:var(--text-mid);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;background:transparent;text-decoration:none;transition:all 0.2s;}
+  .form-cta-secondary:hover{border-color:rgba(255,255,255,0.2);color:white;}
+  .form-note{text-align:center;font-size:11px;color:var(--text-lo);margin-top:12px;line-height:1.6;}
+
+  /* CTA SECTION */
+  .cta-section{padding:100px 60px;text-align:center;position:relative;overflow:hidden;}
+  .cta-blob-1{position:absolute;width:500px;height:500px;background:var(--purple);border-radius:50%;filter:blur(150px);opacity:0.1;top:-150px;left:-80px;pointer-events:none;}
+  .cta-blob-2{position:absolute;width:400px;height:400px;background:var(--blue);border-radius:50%;filter:blur(150px);opacity:0.09;bottom:-150px;right:-80px;pointer-events:none;}
+  .cta-inner{position:relative;z-index:2;max-width:660px;margin:0 auto;}
+  .cta-inner h2{font-size:clamp(32px,4.5vw,52px);letter-spacing:-0.02em;margin-bottom:18px;}
+  .cta-inner p{font-size:16px;color:var(--text-mid);margin-bottom:40px;line-height:1.75;}
+  .cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* FOOTER */
+  footer{padding:32px 60px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+  .footer-left{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-lo);}
+  .footer-divider{width:1px;height:14px;background:var(--border);}
+  .footer-right{font-size:12px;color:var(--text-lo);}
+  .footer-links{display:flex;gap:20px;}
+  .footer-links a{font-size:12px;color:var(--text-lo);text-decoration:none;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--text-mid);}
+
+  @media(max-width:1024px){
+    .products-grid{grid-template-columns:repeat(2,1fr);}
+    .categories-grid{grid-template-columns:1fr;}
+    .category-card:first-child{grid-column:span 1;}
+    .process-paths{grid-template-columns:1fr;}
+    .process-steps{grid-template-columns:1fr;gap:40px;}
+    .mj-layout{grid-template-columns:1fr;gap:40px;}
+    .value-grid{grid-template-columns:1fr 1fr;}
+    .why-layout{grid-template-columns:1fr;gap:50px;}
+    .emotions-grid{grid-template-columns:1fr;}
+    .barriers-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:768px){
+    nav{padding:16px 24px;}.nav-links{display:none;}
+    section{padding:70px 24px;}
+    .hero{padding:120px 24px 80px;}
+    .products-grid{grid-template-columns:1fr;}
+    .value-grid{grid-template-columns:1fr;}
+    .before-after{grid-template-columns:1fr;}
+    .barriers-grid{grid-template-columns:1fr;}
+    .divider{margin:0 24px;}
+    .footer-links{display:none;}
+  }
+  /* BESPOKE FORM */
+  .bespoke-field-group{margin-bottom:14px;}
+  .bespoke-label{display:block;font-size:11px;font-weight:600;color:var(--text-mid);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;}
+  .bespoke-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:9px;padding:10px 13px;color:white;font-family:'DM Sans',sans-serif;font-size:13px;resize:none;transition:border-color 0.2s;box-sizing:border-box;}
+  .bespoke-input:focus{outline:none;border-color:rgba(150,71,255,0.5);}
+  .bespoke-input::placeholder{color:var(--text-lo);}
+  .area-checks{display:flex;flex-direction:column;gap:7px;}
+  .area-check{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text-mid);cursor:pointer;padding:7px 10px;border-radius:8px;transition:background 0.15s;}
+  .area-check:hover{background:rgba(150,71,255,0.07);color:var(--text-hi);}
+  .area-check input[type="checkbox"]{appearance:none;width:16px;height:16px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;cursor:pointer;position:relative;transition:all 0.15s;}
+  .area-check input[type="checkbox"]:checked{background:var(--purple);border-color:var(--purple);}
+  .area-check input[type="checkbox"]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:white;font-size:10px;font-weight:700;}
+  .area-check input[type="checkbox"]:checked + *{color:var(--text-hi);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">
+      <svg width="18" height="16" viewBox="0 0 263 240" fill="none">
+        <path d="M3.68164 0L176.514 2.70018L175.287 81.2522L88.8708 79.9021L87.6436 158.454L1.22719 157.104L3.68164 0Z" fill="white"/>
+        <path d="M175.287 81.2514L261.704 82.6015L259.249 239.703L86.4166 237.003L87.6439 158.45L174.06 159.801L175.287 81.2485Z" fill="white" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">Bayzat <span>Studio</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#micro-jobs">Where it makes a difference</a></li>
+    <li><a href="#solutions">Areas to address</a></li>
+    <li><a href="#process">How we work together</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="nav-cta-ghost" href="https://calendly.com/generic-bookings?utm_campaign=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_content=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_medium=email_action&utm_source=customer.io" target="_blank">Book a call with your CSM</a>
+    <button class="nav-cta" onclick="document.getElementById('process').scrollIntoView({behavior:'smooth'})">Submit requirements →</button>
+  </div>
+</nav>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     HERO — Oneliner: What + Core Job + Value
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-up d1">
+      <div class="hero-eyebrow-dot"></div>
+      Bayzat Studio — For Bayzat customers
+    </div>
+    <h1 class="fade-up d2">
+      Your operations. Running themselves.<br>
+      <span class="gradient-text">On the platform you already use.</span>
+    </h1>
+    <p class="hero-sub fade-up d3">
+      Bayzat Studio turns your existing platform into a machine that <strong>automates what's manual, connects what's siloed, and handles requests without a shared inbox</strong> — scoped specifically around how your business runs.
+    </p>
+    <div class="hero-actions fade-up d4">
+      <button class="btn-primary" onclick="document.getElementById('micro-jobs').scrollIntoView({behavior:'smooth'})">
+        See where it makes a difference →
+      </button>
+      <a class="btn-ghost" href="https://calendly.com/generic-bookings?utm_campaign=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_content=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_medium=email_action&utm_source=customer.io" target="_blank">
+        📅 Book a call with your CSM
+      </a>
+    </div>
+    <!-- Pain pills — before/after micro-snapshot -->
+    <div class="hero-pain-strip fade-up d5">
+      <div class="pain-pill">
+        <span class="pain-pill-strike">Chasing approvals</span>
+        <span class="pain-pill-arrow">→</span>
+        <span class="pain-pill-result">Auto-escalated</span>
+      </div>
+      <div class="pain-pill">
+        <span class="pain-pill-strike">WhatsApp requests</span>
+        <span class="pain-pill-arrow">→</span>
+        <span class="pain-pill-result">Structured, tracked</span>
+      </div>
+      <div class="pain-pill">
+        <span class="pain-pill-strike">Manual re-entry</span>
+        <span class="pain-pill-arrow">→</span>
+        <span class="pain-pill-result">Data flows automatically</span>
+      </div>
+      <div class="pain-pill">
+        <span class="pain-pill-strike">Offboarding by memory</span>
+        <span class="pain-pill-arrow">→</span>
+        <span class="pain-pill-result">Every step triggered</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE STRIP -->
+<div class="value-strip">
+  <div class="value-strip-inner">
+    <div class="vs-stat">
+      <div class="vs-num">65<sup>+</sup></div>
+      <div class="vs-label">Pre-built automation recipes</div>
+    </div>
+    <div class="vs-div"></div>
+    <div class="vs-stat">
+      <div class="vs-num">100<sup>+</sup></div>
+      <div class="vs-label">System integrations</div>
+    </div>
+    <div class="vs-div"></div>
+    <div class="vs-stat">
+      <div class="vs-num">0</div>
+      <div class="vs-label">Lines of code required</div>
+    </div>
+    <div class="vs-div"></div>
+    <div class="vs-stat">
+      <div class="vs-num">4k<sup>+</sup></div>
+      <div class="vs-label">Companies on Bayzat</div>
+    </div>
+    <div class="vs-div"></div>
+    <div class="vs-usps">
+      <span class="vs-usp">🇦🇪 UAE & GCC–native</span>
+      <span class="vs-usp">🛡️ ISO 27001 · SOC 2 Type 2</span>
+      <span class="vs-usp">🎯 Scoped around your business</span>
+      <span class="vs-usp">⚡ Runs inside your existing Bayzat</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     MICRO JOBS + AHA MOMENT
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="micro-jobs-section" id="micro-jobs">
+  <div class="section-header">
+    <div class="section-eyebrow">Where it makes a difference</div>
+    <h2 class="section-title">Three things every team is fighting with. Every day.</h2>
+    <p class="section-sub">Bayzat Studio addresses the jobs that drain the most time — the ones that are too manual to scale, too fragmented to track, and too risky to leave undone.</p>
+  </div>
+
+  <div class="mj-layout">
+    <!-- Tabs -->
+    <div class="mj-tabs">
+
+      <div class="mj-tab active" onclick="setMjTab(0, this)">
+        <div class="mj-tab-num">01</div>
+        <div class="mj-tab-body">
+          <h4>Processes that depend on someone remembering</h4>
+          <p>Onboarding, offboarding, probation reviews, visa renewals — all running on memory, spreadsheets, and WhatsApp. When the right person is busy, things fall through.</p>
+        </div>
+      </div>
+
+      <div class="mj-tab" onclick="setMjTab(1, this)">
+        <div class="mj-tab-num">02</div>
+        <div class="mj-tab-body">
+          <h4>Requests that disappear into inboxes</h4>
+          <p>Employees ask for things via message or email. There's no tracking, no structure, no SLA. HR ends up as the bottleneck — and employees have no idea what's happening with their request.</p>
+        </div>
+      </div>
+
+      <div class="mj-tab" onclick="setMjTab(2, this)">
+        <div class="mj-tab-num">03</div>
+        <div class="mj-tab-body">
+          <h4>Data that has to be entered twice — in every system</h4>
+          <p>A salary changes. A new hire starts. Someone transfers departments. And then Finance, IT, and three other tools need to hear about it — manually, from someone on your HR team.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Aha Moment Panels -->
+    <div class="mj-panel">
+
+      <!-- Panel 0: Process automation -->
+      <div class="mj-scenario active" id="mj-panel-0">
+        <div class="aha-card">
+          <div class="aha-card-header">
+            <div class="aha-card-header-left">
+              <div class="aha-dot" style="background:#9647FF;"></div>
+              <div class="aha-label">EMPLOYEE LIFECYCLE AUTOMATION</div>
+            </div>
+            <div class="aha-badge">Bayzat Workflows</div>
+          </div>
+          <div class="aha-card-body">
+            <div class="before-after">
+              <div class="ba-block before">
+                <div class="ba-label">Before</div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>HR emails IT, Finance, and the line manager separately — every single hire</span></div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>Probation dates tracked in a spreadsheet no one checks on time</span></div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>Offboarding is a panic — assets unrecovered, access left open</span></div>
+              </div>
+              <div class="ba-block after">
+                <div class="ba-label">After</div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>Each stakeholder receives their tasks the moment a new hire is added in Bayzat</span></div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>Probation reviews triggered 14 days before end — with escalation if ignored</span></div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>Offboarding checklist fires automatically across IT, Finance, and admin</span></div>
+              </div>
+            </div>
+            <div class="aha-outcome">
+              <div class="aha-outcome-icon">⚡</div>
+              <p>HR goes from <strong>2–4 hours of coordination per hire</strong> to under 30 minutes — and the process runs the same way whether it's 5 hires this month or 50.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 1: Service desk -->
+      <div class="mj-scenario" id="mj-panel-1">
+        <div class="aha-card">
+          <div class="aha-card-header">
+            <div class="aha-card-header-left">
+              <div class="aha-dot" style="background:#475CFF;"></div>
+              <div class="aha-label">EMPLOYEE REQUEST MANAGEMENT</div>
+            </div>
+            <div class="aha-badge">Bayzat Service Desk</div>
+          </div>
+          <div class="aha-card-body">
+            <div class="before-after">
+              <div class="ba-block before">
+                <div class="ba-label">Before</div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>Salary certificates, WFH requests, leave corrections — all arrive via WhatsApp or email</span></div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>No tracking — employees ask "what happened to my request?" constantly</span></div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>HR can't report on volume, types, or how long things take to resolve</span></div>
+              </div>
+              <div class="ba-block after">
+                <div class="ba-label">After</div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>Every request enters a structured form with a unique ID — nothing goes untracked</span></div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>Routes automatically to the right approver. Employees see their status in real time.</span></div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>Full visibility into request volume, types, and resolution times — always</span></div>
+              </div>
+            </div>
+            <div class="aha-outcome">
+              <div class="aha-outcome-icon">🎫</div>
+              <p>HR stops being a <strong>reactive inbox</strong> and becomes a structured function. Employees stop chasing — they just check the status themselves.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Integrations -->
+      <div class="mj-scenario" id="mj-panel-2">
+        <div class="aha-card">
+          <div class="aha-card-header">
+            <div class="aha-card-header-left">
+              <div class="aha-dot" style="background:#7040FF;"></div>
+              <div class="aha-label">SYSTEM INTEGRATION & DATA SYNC</div>
+            </div>
+            <div class="aha-badge">Bayzat Integrations</div>
+          </div>
+          <div class="aha-card-body">
+            <div class="before-after">
+              <div class="ba-block before">
+                <div class="ba-label">Before</div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>Every employee change requires manual re-entry in the ERP, Active Directory, and payroll</span></div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>Data inconsistencies cause downstream payroll errors and access issues</span></div>
+                <div class="ba-item"><span class="ba-item-icon">⚠️</span><span>HR spends hours per week on duplicate data entry — not HR strategy</span></div>
+              </div>
+              <div class="ba-block after">
+                <div class="ba-label">After</div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>A change in Bayzat propagates to connected systems automatically — within minutes</span></div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>Zero re-entry errors. All systems reflect the same data at the same time.</span></div>
+                <div class="ba-item"><span class="ba-item-icon">✦</span><span>100+ system connectors — CRM, ERP, Slack, Google Workspace and more</span></div>
+              </div>
+            </div>
+            <div class="aha-outcome">
+              <div class="aha-outcome-icon">🔗</div>
+              <p>Bayzat becomes the <strong>source of truth</strong> for your entire stack — not one more system to keep in sync manually.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     VALUE DELIVERY — Per Micro Job
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="value-section" id="value">
+  <div class="section-header">
+    <div class="section-eyebrow">The value, made concrete</div>
+    <h2 class="section-title">What actually changes when it works.</h2>
+    <p class="section-sub">Not features — outcomes. The concrete difference Bayzat Studio makes for the people running your business day-to-day.</p>
+  </div>
+  <div class="value-grid">
+
+    <div class="value-card">
+      <div class="value-card-accent"></div>
+      <div class="value-metric">&lt;30<span style="font-size:24px;">min</span></div>
+      <div class="value-metric-label">Per hire, instead of 2–4 hours</div>
+      <h3>HR stops coordinating. The platform does it.</h3>
+      <p>Onboarding, probation tracking, offboarding, and every lifecycle event in between runs automatically — with each stakeholder receiving exactly their part, exactly when they need it.</p>
+      <div class="value-card-tag">⚡ Bayzat Workflows</div>
+    </div>
+
+    <div class="value-card">
+      <div class="value-card-accent"></div>
+      <div class="value-metric">100%</div>
+      <div class="value-metric-label">Of requests tracked — zero lost in inboxes</div>
+      <h3>Every request has a status. No more chasing.</h3>
+      <p>Employees submit structured tickets. Approvals route automatically. SLAs are enforced. HR gets reporting instead of a flood of follow-up messages — and employees can see where things stand without asking.</p>
+      <div class="value-card-tag">🎫 Bayzat Service Desk</div>
+    </div>
+
+    <div class="value-card">
+      <div class="value-card-accent"></div>
+      <div class="value-metric">0hrs</div>
+      <div class="value-metric-label">Per week on duplicate data entry</div>
+      <h3>One change in Bayzat. Every system updated.</h3>
+      <p>Salary change, new hire, department transfer — it happens in Bayzat and propagates to your ERP, comms tools, and directories automatically. No re-entry. No lag. No reconciliation debt.</p>
+      <div class="value-card-tag">🔗 Bayzat Integrations</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     WHY WE DELIVER — Capabilities
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="why-section" id="products">
+  <div class="why-layout">
+    <div class="why-left">
+      <div class="section-eyebrow">Why it works</div>
+      <h2 class="section-title">Built for how HR and operations actually run in the GCC.</h2>
+      <p class="section-sub" style="margin-top:14px;">Generic automation tools don't know what a probation period looks like in the UAE. They don't understand WPS cycles, air ticket policies, or Arabic-language ticket forms. Studio does — because it's native to Bayzat.</p>
+    </div>
+    <div class="why-right">
+      <div class="why-stat-card">
+        <div class="why-stat-card-num">60<sup style="font-size:20px;">+</sup></div>
+        <p>Workflow triggers mapped to real HR events — hire date, probation end, visa expiry, payroll cycle close, leave requests, and more. No generic webhooks. No guesswork.</p>
+      </div>
+      <div class="why-stat-card">
+        <div class="why-stat-card-num">19</div>
+        <p>Pre-built Service Desk ticket templates across payroll, attendance, leave, IT, facilities, and employee relations — all with Arabic support out of the box.</p>
+      </div>
+      <div class="why-stat-card">
+        <div class="why-stat-card-num">100<sup style="font-size:20px;">+</sup></div>
+        <p>System connectors — so your ERP, Slack, Google Workspace, and everything else stays in sync with Bayzat automatically, not manually.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:60px;">
+    <div class="capability-list">
+      <div class="cap-item">
+        <div class="cap-icon">⚡</div>
+        <div class="cap-body">
+          <h4>Bayzat Workflows — Automate any process, end to end</h4>
+          <p>Set a trigger, define the logic, chain the actions. When something happens in Bayzat, everything that should happen next — runs automatically. Confirmation tasks add a human-in-the-loop when you need one, branching on approve or skip.</p>
+        </div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">🎫</div>
+        <div class="cap-body">
+          <h4>Bayzat Service Desk — One place for every employee request</h4>
+          <p>Structured submission, automatic routing, real-time tracking, enforced SLAs. Employees submit. Approvers action. HR reports. Nobody chases anyone. Every request has a unique ID and a visible status from start to finish.</p>
+        </div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">🔗</div>
+        <div class="cap-body">
+          <h4>Bayzat Integrations — Connect your entire stack to Bayzat</h4>
+          <p>Native connectors for Slack, Google Calendar, and Google Sheets — plus REST API and webhook support for anything else. When Bayzat changes, everything that depends on it changes with it.</p>
+        </div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">✦</div>
+        <div class="cap-body">
+          <h4>Bayzat Apps — Build what doesn't exist yet <span style="font-size:11px;color:var(--text-lo);font-family:'DM Sans',sans-serif;font-weight:300;">(Coming soon)</span></h4>
+          <p>Describe the tool your team needs in plain language. AI builds it. Deploy it directly inside your Bayzat platform — no dev queue, no separate tool, no waiting.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     EMOTIONS AT POINT B
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="emotions-section">
+  <div class="emotions-inner">
+    <div class="section-header" style="text-align:center;max-width:600px;margin:0 auto 52px;">
+      <div class="section-eyebrow">The feeling on the other side</div>
+      <h2 class="section-title" style="max-width:none;">What it's like when it works the way it should.</h2>
+    </div>
+    <div class="emotions-grid">
+
+      <div class="emotion-card emotion-card-1">
+        <div class="emotion-role">HR Manager</div>
+        <div class="emotion-feeling">Confident, not reactive.</div>
+        <p class="emotion-desc">The processes are running. The onboarding happened. The probation review fired on time. Nothing slipped through because you were busy. For the first time, you're ahead of the queue — not buried in it.</p>
+        <div class="emotion-from">
+          <span>From:</span>
+          <span class="emotion-from-arrow">→</span>
+          <span>Anxious. Reactive. Worried something got lost in the inbox.</span>
+        </div>
+      </div>
+
+      <div class="emotion-card emotion-card-2">
+        <div class="emotion-role">General Manager</div>
+        <div class="emotion-feeling">In control — without being involved.</div>
+        <p class="emotion-desc">You're not chasing departments. You're not manually coordinating what should have just happened. Approvals escalate themselves. Cross-team processes execute without you as the fallback. You get exceptions — not noise.</p>
+        <div class="emotion-from">
+          <span>From:</span>
+          <span class="emotion-from-arrow">→</span>
+          <span>Frustrated. Spending strategic time on operational chasing.</span>
+        </div>
+      </div>
+
+      <div class="emotion-card emotion-card-3">
+        <div class="emotion-role">Finance Manager</div>
+        <div class="emotion-feeling">Accurate. On time. No surprises.</div>
+        <p class="emotion-desc">Payroll closes correctly because the data was already there. Every compensation change came through a formal approval. There's an audit trail for everything. You spend month-end reviewing — not gathering.</p>
+        <div class="emotion-from">
+          <span>From:</span>
+          <span class="emotion-from-arrow">→</span>
+          <span>Stressed. Chasing HR for inputs. Running payroll on uncertain data.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     BARRIER REDUCTION
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="barriers-section">
+  <div class="section-header">
+    <div class="section-eyebrow">Common questions</div>
+    <h2 class="section-title">The things that usually come up. Answered directly.</h2>
+    <p class="section-sub">Bayzat Studio is designed to remove the friction — including the friction of getting started.</p>
+  </div>
+  <div class="barriers-grid">
+
+    <div class="barrier-card">
+      <div class="barrier-icon">🔧</div>
+      <div class="barrier-label">Barrier</div>
+      <h3>"We'd need IT or developers to make this work."</h3>
+      <div class="barrier-resolve">
+        <div class="barrier-resolve-label">How we remove it</div>
+        <p>Studio is a no-code visual builder. No API setup, no dev queue. Your HR or ops team can configure workflows, ticket forms, and integrations themselves — and we scope and build alongside you during onboarding.</p>
+      </div>
+    </div>
+
+    <div class="barrier-card">
+      <div class="barrier-icon">💰</div>
+      <div class="barrier-label">Barrier</div>
+      <h3>"I don't know what this would cost or what's already included."</h3>
+      <div class="barrier-resolve">
+        <div class="barrier-resolve-label">How we remove it</div>
+        <p>We identify your priorities first, then scope exactly what applies. Your CSM factors in what's already included in your current Bayzat subscription and support package — and flags anything extra before anything is signed off. No surprises.</p>
+      </div>
+    </div>
+
+    <div class="barrier-card">
+      <div class="barrier-icon">⏱️</div>
+      <div class="barrier-label">Barrier</div>
+      <h3>"We don't have the time or headcount to set this up right now."</h3>
+      <div class="barrier-resolve">
+        <div class="barrier-resolve-label">How we remove it</div>
+        <p>We do the scoping, configuration, and setup. You tell us what needs to change; we build it inside your Bayzat platform. You don't need a project team — you need to share your requirements. We handle the rest.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     AREAS TO ADDRESS (existing)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="categories-section" id="solutions">
+  <div class="section-header">
+    <div class="section-eyebrow">Areas we can address</div>
+    <h2 class="section-title">Where do you want to go deeper?</h2>
+    <p class="section-sub">These are the areas where Bayzat Studio makes a difference — and the list keeps growing. Click into any area to see specific examples, each tailored to how your business actually operates.</p>
+  </div>
+  <div class="categories-grid">
+
+    <a class="category-card" href="bayzat-studio-employee-lifecycle.html">
+      <div class="cat-blob" style="background:#9647FF;"></div>
+      <span class="cat-icon">👤</span>
+      <h3>Employee Lifecycle</h3>
+      <p>From the moment someone joins to the day they leave — and every stage in between. Onboarding sequences, offboarding checklists, probation management, and internal transfers: structured, automated, and consistent regardless of who's handling them.</p>
+      <div class="cat-footer">
+        <span class="cat-count">24 examples</span>
+        <div class="cat-arrow">→</div>
+      </div>
+    </a>
+
+    <a class="category-card" href="#">
+      <div class="cat-blob" style="background:#475CFF;"></div>
+      <span class="cat-icon">💰</span>
+      <h3>Payroll & Compensation</h3>
+      <p>Commissions, allowances, deductions, promotions — routed through the right approvals and reflected in payroll without manual re-entry or chasing.</p>
+      <div class="cat-footer">
+        <span class="cat-count">9 examples</span>
+        <div class="cat-arrow">→</div>
+      </div>
+    </a>
+
+    <a class="category-card" href="#">
+      <div class="cat-blob" style="background:#9647FF;"></div>
+      <span class="cat-icon">📢</span>
+      <h3>Communication & Notifications</h3>
+      <p>The right information reaching the right people at the right time. Leave updates, shift reminders, anniversaries, policy changes — sent automatically without anyone having to remember to do it.</p>
+      <div class="cat-footer">
+        <span class="cat-count">8 examples</span>
+        <div class="cat-arrow">→</div>
+      </div>
+    </a>
+
+    <a class="category-card" href="#">
+      <div class="cat-blob" style="background:#475CFF;"></div>
+      <span class="cat-icon">🔌</span>
+      <h3>Systems & Integrations</h3>
+      <p>Connecting Bayzat to the other tools your business depends on — so employee data, events, and actions in one system are automatically reflected in the others without anyone bridging the gap.</p>
+      <div class="cat-footer">
+        <span class="cat-count">3 examples</span>
+        <div class="cat-arrow">→</div>
+      </div>
+    </a>
+
+    <a class="category-card" href="#">
+      <div class="cat-blob" style="background:#9647FF;"></div>
+      <span class="cat-icon">📊</span>
+      <h3>Reporting & Analytics</h3>
+      <p>Visibility into what actually matters — attendance trends, team structure, cross-department data — surfaced in formats that fit how your leadership makes decisions, not generic templates.</p>
+      <div class="cat-footer">
+        <span class="cat-count">4 examples</span>
+        <div class="cat-arrow">→</div>
+      </div>
+    </a>
+
+  </div>
+  <p class="grow-note">These categories and the examples within them continue to expand as we build more with clients across the region.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     PROCESS + REQUIREMENTS FORM (existing)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="process-section" id="process">
+  <div class="section-header">
+    <div class="section-eyebrow">How we work together</div>
+    <h2 class="section-title">Your needs drive what we build.</h2>
+    <p class="section-sub">No fixed package. Browse specific examples in each area, describe your own requirements, or both. Submit what you want to address and we'll come back with a scoped, itemised proposal.</p>
+  </div>
+
+  <div class="process-paths">
+    <div class="path-card">
+      <span class="path-icon">📋</span>
+      <h3>Select from our examples</h3>
+      <p>Browse the areas above and mark what resonates. Each example reflects something we've already scoped and know how to configure inside Bayzat — so you know it's achievable.</p>
+    </div>
+    <div class="path-card featured">
+      <div class="path-tag">Most common</div>
+      <span class="path-icon">✦</span>
+      <h3>A mix of examples and custom</h3>
+      <p>Pick what fits from our library, then add the requirements specific to your business. We scope and build it all together into one proposal — no separate process for bespoke.</p>
+    </div>
+    <div class="path-card">
+      <span class="path-icon">✍️</span>
+      <h3>Bring your own requirements</h3>
+      <p>Have something in mind that isn't in our examples? Describe it. We'll scope it specifically around your business and include it in our proposal.</p>
+    </div>
+  </div>
+
+  <div class="process-steps">
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-num-circle">1</div>
+        <div>
+          <h4>We identify priorities together</h4>
+          <p>Through our conversations, we align on which areas to focus on first — based on what will have the most meaningful impact for your team right now, not a generic checklist.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-circle">2</div>
+        <div>
+          <h4>You share your requirements</h4>
+          <p>Examples from the library, custom requirements, or both — you submit what you want to address and we take it from there. You can do this during the session or afterwards.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-circle">3</div>
+        <div>
+          <h4>We scope and send a proposal</h4>
+          <p>We put together a clear, itemised proposal covering everything identified. We'll factor in your current Bayzat subscription and support package and flag anything that requires an addition — before anything is signed off.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-circle">4</div>
+        <div>
+          <h4>You approve — we build and go live</h4>
+          <p>Once signed off, we get to work — configuring everything inside your Bayzat platform, connected to your data, teams, and existing tools where needed.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-blob"></div>
+      <div class="form-card-inner">
+        <div class="form-title">Submit your requirements</div>
+        <p class="form-desc">Select the areas you want to explore, describe anything specific to your business, and submit. Your CSM will review and come back with a scoped, itemised proposal.</p>
+
+        <div class="bespoke-field-group">
+          <label class="bespoke-label">Which areas are you interested in?</label>
+          <div class="area-checks">
+            <label class="area-check"><input type="checkbox" value="Employee Lifecycle"> Employee Lifecycle</label>
+            <label class="area-check"><input type="checkbox" value="Payroll & Compensation"> Payroll &amp; Compensation</label>
+            <label class="area-check"><input type="checkbox" value="Communication & Notifications"> Communication &amp; Notifications</label>
+            <label class="area-check"><input type="checkbox" value="Systems & Integrations"> Systems &amp; Integrations</label>
+            <label class="area-check"><input type="checkbox" value="Reporting & Analytics"> Reporting &amp; Analytics</label>
+          </div>
+        </div>
+
+        <div class="bespoke-field-group">
+          <label class="bespoke-label" for="hp-bespoke">Describe your requirements <span style="color:var(--text-lo);font-weight:400;">(optional)</span></label>
+          <textarea class="bespoke-input" id="hp-bespoke" rows="3" placeholder="Describe what you're looking to automate, connect, or build — in plain language. We'll scope it from there."></textarea>
+        </div>
+
+        <div class="bespoke-field-group" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label class="bespoke-label" for="hp-company">Company Name</label>
+            <input type="text" class="bespoke-input" id="hp-company" placeholder="Your company">
+          </div>
+          <div>
+            <label class="bespoke-label" for="hp-name">Your Name</label>
+            <input type="text" class="bespoke-input" id="hp-name" placeholder="Full name">
+          </div>
+        </div>
+
+        <div class="bespoke-field-group">
+          <label class="bespoke-label" for="hp-email">Email Address</label>
+          <input type="email" class="bespoke-input" id="hp-email" placeholder="your@company.com">
+        </div>
+
+        <button class="form-cta-primary" id="hp-submit-btn" onclick="submitHomepageForm()">Submit my requirements →</button>
+        <div id="hp-form-error" style="display:none;color:#FF6B6B;font-size:12px;text-align:center;margin-top:8px;">Please fill in your name, company, and email before submitting.</div>
+        <p class="form-note">Your dedicated CSM will review your submission and come back with a scoped, itemised proposal — factoring in your current Bayzat subscription and support package.</p>
+
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);text-align:center;">
+          <p style="font-size:12px;color:var(--text-lo);margin-bottom:8px;">Prefer to browse specific examples first?</p>
+          <a class="form-cta-secondary" href="#solutions">Browse areas to address →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="cta-section">
+  <div class="cta-blob-1"></div>
+  <div class="cta-blob-2"></div>
+  <div class="cta-inner">
+    <h2>Somewhere in here is exactly what your team needs.</h2>
+    <p>Browse the areas we work across, mark what resonates, and share your requirements. Or talk to your CSM directly — they'll help you identify where to start.</p>
+    <div class="cta-actions">
+      <button class="btn-primary" onclick="document.getElementById('solutions').scrollIntoView({behavior:'smooth'})">Browse areas to address →</button>
+      <a class="btn-ghost" href="https://calendly.com/generic-bookings?utm_campaign=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_content=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_medium=email_action&utm_source=customer.io" target="_blank">📅 Book a call with your CSM</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <div class="nav-logo-mark" style="width:24px;height:24px;border-radius:6px;">
+      <svg width="13" height="12" viewBox="0 0 263 240" fill="none">
+        <path d="M3.68164 0L176.514 2.70018L175.287 81.2522L88.8708 79.9021L87.6436 158.454L1.22719 157.104L3.68164 0Z" fill="white"/>
+        <path d="M175.287 81.2514L261.704 82.6015L259.249 239.703L86.4166 237.003L87.6439 158.45L174.06 159.801L175.287 81.2485Z" fill="white" opacity="0.7"/>
+      </svg>
+    </div>
+    <span>Bayzat Studio</span>
+    <div class="footer-divider"></div>
+    <span>Workflows · Service Desk · Integrations · Apps</span>
+  </div>
+  <div class="footer-links">
+    <a href="#micro-jobs">Where it helps</a>
+    <a href="#solutions">Areas</a>
+    <a href="#process">How we work</a>
+    <a href="https://calendly.com/generic-bookings?utm_campaign=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_content=2025_Q1_Year+Wrap_%26_Welcome_v1&utm_medium=email_action&utm_source=customer.io" target="_blank">Book a CSM call</a>
+  </div>
+  <div class="footer-right">© 2025 Bayzat. All rights reserved.</div>
+</footer>
+
+<script>
+  // ── Micro Jobs Tab Switcher ──
+  function setMjTab(idx, el) {
+    document.querySelectorAll('.mj-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.mj-scenario').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('mj-panel-' + idx).classList.add('active');
+  }
+
+  // ── Scroll reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity='1';
+        entry.target.style.transform='translateY(0)';
+      }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll(
+    '.product-card,.category-card,.path-card,.step-item,.form-card,.bundle-notice,.value-card,.barrier-card,.emotion-card,.why-stat-card,.cap-item,.mj-tab'
+  ).forEach((el,i) => {
+    el.style.opacity='0';
+    el.style.transform='translateY(20px)';
+    el.style.transition=`opacity 0.6s ease ${(i%6)*0.07}s, transform 0.6s ease ${(i%6)*0.07}s`;
+    observer.observe(el);
+  });
+
+  // ── Form submit ──
+  function submitHomepageForm() {
+    var company = document.getElementById('hp-company').value.trim();
+    var name    = document.getElementById('hp-name').value.trim();
+    var email   = document.getElementById('hp-email').value.trim();
+    var bespoke = document.getElementById('hp-bespoke').value.trim();
+    var errEl   = document.getElementById('hp-form-error');
+    var btn     = document.getElementById('hp-submit-btn');
+
+    if (!company || !name || !email) {
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+
+    var areas = [];
+    document.querySelectorAll('.area-check input[type="checkbox"]:checked').forEach(function(cb) {
+      areas.push(cb.value);
+    });
+    var areasText = areas.length > 0 ? areas.join(', ') : 'Not specified';
+    var itemsText = areas.length > 0
+      ? 'Submitted from homepage.\nAreas of interest: ' + areasText + '\nNo specific items selected from solution library.'
+      : 'Submitted from homepage. No specific area or library items selected.';
+
+    var formBase = 'https://docs.google.com/forms/d/e/1FAIpQLScxZUAWDfCJI0vSGanxtfOF6cYOq39HCNEuV7nfN--CjckxpA/viewform';
+    var formUrl  = formBase +
+      '?usp=pp_url' +
+      '&entry.1809970434=' + encodeURIComponent(company) +
+      '&entry.700478273='  + encodeURIComponent(name) +
+      '&entry.856431443='  + encodeURIComponent(email) +
+      '&entry.1416178708=' + encodeURIComponent(areasText) +
+      '&entry.1951712668=' + encodeURIComponent(itemsText) +
+      '&entry.750005871='  + encodeURIComponent(bespoke || '');
+
+    btn.textContent = 'Opening form...';
+    btn.disabled = true;
+    setTimeout(function() {
+      window.open(formUrl, '_blank');
+      btn.textContent = 'Submit my requirements →';
+      btn.disabled = false;
+    }, 400);
+  }
+</script>
+</body>
+</html>
