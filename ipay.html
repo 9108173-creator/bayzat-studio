@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayzat Studio for iPay</title>
+    <style>
+        :root {
+            --bayzat-purple: #9647FF;
+            --bayzat-dark-purple: #4A378B;
+            --bayzat-charcoal: #242424;
+            --bayzat-black: #000000;
+            --bayzat-white: #FFFFFF;
+            --bayzat-stone: #E8E8E8;
+            --bayzat-gray-1: #C8C8C8;
+            --font-headline: Arial, Helvetica, sans-serif;
+            --font-body: Arial, Helvetica, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--bayzat-black);
+            background: var(--bayzat-stone);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--bayzat-white);
+            box-shadow: 0 0 20px rgba(0,0,0,0.08);
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, var(--bayzat-purple) 0%, var(--bayzat-dark-purple) 100%);
+            color: var(--bayzat-white);
+            padding: 60px 50px;
+            text-align: center;
+        }
+
+        .hero-logo {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-headline);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 36px;
+            line-height: 1.1;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .hero .tagline {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 50px;
+        }
+
+        /* INTRO */
+        .intro {
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+            text-align: center;
+        }
+
+        .intro .headline {
+            font-family: var(--font-headline);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--bayzat-purple);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .intro p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .intro p + p {
+            margin-top: 12px;
+        }
+
+        /* EXECUTIVE SUMMARY */
+        .exec-summary {
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+        }
+
+        .exec-summary .headline {
+            font-family: var(--font-headline);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--bayzat-purple);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .exec-summary p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+        }
+
+        .exec-summary p + p {
+            margin-top: 12px;
+        }
+
+        .exec-summary .highlight {
+            font-weight: 700;
+            color: var(--bayzat-purple);
+        }
+
+        /* INTRODUCING SECTION */
+        .intro-studio {
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+        }
+
+        .intro-studio .headline {
+            font-family: var(--font-headline);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--bayzat-purple);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .intro-studio p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+        }
+
+        .intro-studio p + p {
+            margin-top: 12px;
+        }
+
+        .studio-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .studio-feature {
+            background: var(--bayzat-stone);
+            border-radius: 8px;
+            padding: 18px;
+        }
+
+        .studio-feature strong {
+            display: block;
+            color: var(--bayzat-purple);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .studio-feature span {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* SECTION */
+        .section {
+            margin-bottom: 55px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bayzat-purple);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: white;
+        }
+
+        .section-title {
+            font-family: var(--font-headline);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--bayzat-charcoal);
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .section-goal {
+            background: var(--bayzat-stone);
+            border-left: 4px solid var(--bayzat-purple);
+            padding: 12px 18px;
+            margin-bottom: 25px;
+            margin-top: 12px;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+            color: var(--bayzat-charcoal);
+        }
+
+        .section-goal strong {
+            color: var(--bayzat-purple);
+        }
+
+        /* PHASE */
+        .phase {
+            margin-bottom: 28px;
+        }
+
+        .phase-label {
+            font-family: var(--font-headline);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--bayzat-purple);
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--bayzat-stone);
+        }
+
+        .automation-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .automation-list li {
+            position: relative;
+            padding: 10px 0 10px 30px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .automation-list li:last-child {
+            border-bottom: none;
+        }
+
+        .automation-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 14px;
+            width: 16px;
+            height: 16px;
+            background: var(--bayzat-purple);
+            border-radius: 4px;
+            opacity: 0.15;
+        }
+
+        .automation-list li::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 19px;
+            width: 6px;
+            height: 6px;
+            background: var(--bayzat-purple);
+            border-radius: 2px;
+        }
+
+        .automation-list li strong {
+            color: var(--bayzat-charcoal);
+        }
+
+        /* DIVIDER */
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, var(--bayzat-purple), transparent);
+            margin: 45px 0;
+        }
+
+        /* PRICING */
+        .pricing-section {
+            margin-bottom: 0;
+        }
+
+        .pricing-card {
+            background: var(--bayzat-white);
+            border: 2px solid var(--bayzat-purple);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .pricing-label {
+            font-family: var(--font-headline);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--bayzat-purple);
+            margin-bottom: 8px;
+        }
+
+        .pricing-amount {
+            font-family: var(--font-headline);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--bayzat-charcoal);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .pricing-amount span {
+            font-size: 22px;
+            color: var(--bayzat-purple);
+            vertical-align: super;
+        }
+
+        .pricing-type {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        .pricing-includes {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .pricing-includes li {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+            padding-left: 28px;
+            position: relative;
+        }
+
+        .pricing-includes li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-includes li::before {
+            content: '\2713';
+            position: absolute;
+            left: 0;
+            color: var(--bayzat-purple);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .pricing-note {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, var(--bayzat-purple) 0%, var(--bayzat-dark-purple) 100%);
+            color: var(--bayzat-white);
+            padding: 45px 50px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-family: var(--font-headline);
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .cta-section p {
+            font-size: 15px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* FOOTER */
+        .footer {
+            padding: 20px 50px;
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            border-top: 1px solid var(--bayzat-gray-1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HERO -->
+        <div class="hero">
+            <div class="hero-logo">
+                <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                    <circle cx="25" cy="25" r="23" stroke="white" stroke-width="2"/>
+                    <text x="25" y="32" font-size="26" font-weight="bold" fill="white" text-anchor="middle">B</text>
+                </svg>
+            </div>
+            <h1>Your HR. Your Rules.</h1>
+            <p class="tagline">Bayzat Studio for iPay. Custom-built automations designed for how your business actually works &mdash; delivered, configured, and ready to go.</p>
+        </div>
+
+        <div class="content">
+
+            <!-- EXECUTIVE SUMMARY -->
+            <div class="exec-summary">
+                <div class="headline">Executive Summary</div>
+                <p>Bayzat is pleased to present this Custom Proposal for iPay, designed to enhance workforce efficiency, reduce administrative overhead, and deliver a seamless employee experience from hire to exit.</p>
+                <p>Through our discussions with the iPay team, we have identified some challenges that impact daily operations. This proposal outlines practical, low-effort solutions that are aligned with iPay's goals of improving process consistency, reducing manual HR tasks, and strengthening internal communication across departments.</p>
+                <p>These features will be delivered through a structured implementation plan over a short timeline of approximately <span class="highlight">1 month</span>. The total cost of implementation is <span class="highlight">AED 8,990</span>.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- INTRODUCING BAYZAT STUDIO -->
+            <div class="intro-studio">
+                <div class="headline">Introducing Bayzat Studio</div>
+                <p>Bayzat Studio is the customisation layer of Bayzat's Work Life Platform &mdash; a powerful suite of tools for automating HR processes, creating custom apps, and connecting systems. Instead of forcing your operations into rigid software boxes, Bayzat Studio adapts to exactly how your business actually works.</p>
+                <p>For iPay, our team will design, build, and configure every automation outlined in this proposal using four core capabilities:</p>
+
+                <div class="studio-features">
+                    <div class="studio-feature">
+                        <strong>Bayzat Flows</strong>
+                        <span>Visual workflow builder that turns your HR processes into automated, intelligent flows with when-if-then logic and 60+ pre-built templates.</span>
+                    </div>
+                    <div class="studio-feature">
+                        <strong>Bayzat Requests</strong>
+                        <span>Customisable service desk with 18+ ticket types, full Arabic and English support, and configurable approval routing.</span>
+                    </div>
+                    <div class="studio-feature">
+                        <strong>Bayzat Builder</strong>
+                        <span>AI-powered app creation &mdash; describe what you need in plain language and go from concept to working HR tool in hours.</span>
+                    </div>
+                    <div class="studio-feature">
+                        <strong>Bayzat Connect</strong>
+                        <span>100+ integrations connecting Slack, Teams, WhatsApp, Xero, QuickBooks and more &mdash; no API knowledge needed.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: ONBOARDING -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <div class="section-title">Streamlined Employee Onboarding</div>
+                </div>
+                <div class="section-goal"><strong>Goal:</strong> Faster ramp-up, less manual setup, a consistent first experience every single time.</div>
+
+                <div class="phase">
+                    <div class="phase-label">Before Day One</div>
+                    <ul class="automation-list">
+                        <li><strong>Line manager heads-up:</strong> Notify the line manager automatically, so they're prepared and have time blocked to welcome the new joiner.</li>
+                        <li><strong>HR &amp; PRO alert:</strong> Notify the HR department and PRO to ensure all necessary steps are completed before the start date.</li>
+                        <li><strong>IT setup trigger:</strong> Notify IT to create email accounts, system access, software licenses, and prepare devices (laptop, phone, etc.).</li>
+                    </ul>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-label">After They Join</div>
+                    <ul class="automation-list">
+                        <li><strong>Welcome email:</strong> Send a welcome covering next steps, tasks, company policies, employee handbook, org chart, and welcome videos.</li>
+                        <li><strong>Document reminders:</strong> Remind the new hire to upload required documents and complete forms.</li>
+                        <li><strong>Team introduction:</strong> Send an introductory email to colleagues to introduce the new joiner.</li>
+                    </ul>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-label">First Months</div>
+                    <ul class="automation-list">
+                        <li><strong>Milestone reminders:</strong> Send reminders covering completed milestones and next steps.</li>
+                        <li><strong>Onboarding pulse surveys:</strong> Automated check-ins at 7, 30, 60, and 90 days to track how onboarding is going.</li>
+                        <li><strong>Manager check-in prompts:</strong> Notify the line manager to schedule check-ins and track progress.</li>
+                    </ul>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-label">Auto-Update Employee Profiles</div>
+                    <ul class="automation-list">
+                        <li><strong>Probation end date:</strong> Set automatically when an employee joins &mdash; no manual entry needed.</li>
+                        <li><strong>Line manager assignment:</strong> Rules-based auto-assignment based on department or office.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION 2: PROBATION -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                    </div>
+                    <div class="section-title">Probation Management</div>
+                </div>
+                <div class="section-goal"><strong>Goal:</strong> No missed reviews, clear accountability, documented decisions. Every time.</div>
+
+                <div class="phase">
+                    <div class="phase-label">Before Probation Ends</div>
+                    <ul class="automation-list">
+                        <li><strong>Manager notification:</strong> Notify the line manager about the upcoming probation end date and share the performance review form.</li>
+                        <li><strong>HR follow-up:</strong> Notify HR to ensure the performance review form is completed on time.</li>
+                        <li><strong>Calendar invite:</strong> Auto-create a calendar invite for the manager and HR, or manager and employee.</li>
+                    </ul>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-label">After the Probation Review</div>
+                    <ul class="automation-list">
+                        <li><strong>Outcome selection:</strong> Line managers select the probation outcome: completed, extended, or terminated.</li>
+                        <li><strong>Stakeholder notifications:</strong> Notify HR and the employee of the outcome automatically.</li>
+                        <li><strong>Platform updates:</strong> Trigger the relevant changes &mdash; extended probation updates the end date; terminated triggers offboarding.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION 3: OFFBOARDING -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                    </div>
+                    <div class="section-title">Streamlined Employee Offboarding</div>
+                </div>
+                <div class="section-goal"><strong>Goal:</strong> Controlled exits, no missed steps, cross-team visibility from start to finish.</div>
+
+                <div class="phase">
+                    <div class="phase-label">Before the Employee Leaves</div>
+                    <ul class="automation-list">
+                        <li><strong>Resignation requests:</strong> A dedicated ticket type allowing employees to submit their resignation requests directly.</li>
+                        <li><strong>Manager handover prompt:</strong> Notify the line manager to start planning handover tasks.</li>
+                        <li><strong>IT deactivation prep:</strong> Notify IT to prepare to deactivate accounts and recover devices.</li>
+                        <li><strong>HR &amp; Finance alert:</strong> Notify HR and Finance to handle final paperwork and submit End of Service.</li>
+                        <li><strong>Employee checklist:</strong> Send the employee their offboarding checklist and tasks.</li>
+                    </ul>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-label">On the Last Working Day</div>
+                    <ul class="automation-list">
+                        <li><strong>Farewell email:</strong> Send a guide for returning equipment, accessing final payslips, and other exit steps.</li>
+                        <li><strong>Access revocation:</strong> Automatically revoke access to Bayzat &mdash; no manual action required.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION 4: INTERNAL COMMS -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                    </div>
+                    <div class="section-title">Internal Communication</div>
+                </div>
+                <div class="section-goal"><strong>Goal:</strong> Keep everyone informed, reduce risk, improve consistency &mdash; without lifting a finger.</div>
+
+                <div class="phase">
+                    <div class="phase-label">Automated Updates &amp; Celebrations</div>
+                    <ul class="automation-list">
+                        <li><strong>Leave updates:</strong> Notify relevant teams when someone is on leave &mdash; no Slack messages needed.</li>
+                        <li><strong>Work anniversary emails:</strong> Automatically celebrate employee milestones.</li>
+                        <li><strong>Birthday emails:</strong> Send birthday greetings to employees on their special day.</li>
+                        <li><strong>Public holiday updates:</strong> Automatically post on the Newsfeed, send mass emails, or notify via Slack when public holidays are updated.</li>
+                        <li><strong>Salary updates:</strong> Notify relevant employees when salary information is updated.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PRICING -->
+        <div class="content pricing-section">
+            <div class="divider"></div>
+            <div class="intro">
+                <div class="headline">Priceless. Almost.</div>
+                <p>One payment. All four automation modules. No recurring fees, no hidden costs. We set it up, you let it run forever.</p>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-label">Complete Bayzat Studio Bundle</div>
+                <div class="pricing-amount"><span>AED</span> 8,990</div>
+                <div class="pricing-type">One-time setup fee &mdash; no recurring charges</div>
+                <ul class="pricing-includes">
+                    <li>Streamlined Employee Onboarding</li>
+                    <li>Probation Management</li>
+                    <li>Streamlined Employee Offboarding</li>
+                    <li>Internal Communication Automations</li>
+                    <li>Auto-update employee profiles</li>
+                    <li>Automated surveys, reminders &amp; notifications</li>
+                    <li>Calendar invites &amp; cross-team alerts</li>
+                </ul>
+                <div class="pricing-note">Flat fee &mdash; same price regardless of company size or employee count.</div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <h2>It Takes Work to Change What's Possible.<br>We've Done the Work.</h2>
+            <p>Bayzat Studio for iPay. One platform, every workflow, zero busywork. Discover what's possible when you free up your potential.</p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>Bayzat Studio for iPay | Bayzat. The Work Life Platform. | February 2026</p>
+        </div>
+
+    </div>
+</body>
+</html>
